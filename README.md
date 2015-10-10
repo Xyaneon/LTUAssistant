@@ -8,6 +8,8 @@ This project depends on the following:
 - The Python [SpeechRecognition][2] module for voice input
   - This might also require that the PyAudio packages are installed. On Ubuntu,
   this can be done by running `sudo apt-get install python-pyaudio python3-pyaudio`.
+  - It also may require flac command line tools. On Ubuntu, this can
+  be done by running `sudo apt-get install flac`
 
 It currently runs on Ubuntu-based Linux systems, though we would like to
 implement cross-platform functionality soon.
