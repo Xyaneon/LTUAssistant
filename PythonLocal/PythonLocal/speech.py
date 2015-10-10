@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 
 # NOTE: this example requires PyAudio because it uses the Microphone class
 
@@ -8,7 +8,9 @@ def Listen():
 	# obtain audio from the microphone
 	r = sr.Recognizer()
 	ret = ""
-	with sr.Microphone() as source:
+
+    # For Windows, add zero as parameter
+	with sr.Microphone(0) as source:
 		print("Say something!")
 		audio = r.listen(source)
 

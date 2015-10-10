@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>9f3ed1aa-81f6-4822-819f-6c70ff3a6ad0</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>PythonLocal.py</StartupFile>
+    <StartupFile>speech.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
