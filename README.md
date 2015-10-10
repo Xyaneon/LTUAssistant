@@ -1,8 +1,12 @@
 # LTUAssistant
 An AI assistant like Google Now, Siri, Cortana, etc. for an LTU senior project.
 
-This project depends on `espeak` for audio output and
-[stanford_corenlp_pywrapper][1].
+This project depends on the following:
+- `espeak` for audio output
+- [stanford_corenlp_pywrapper][1] for natural language processing
+- The Python [SpeechRecognition][2] module for voice input
+  - This might also require that the PyAudio packages are installed. On Ubuntu,
+  this can be done by running `sudo apt-get install python-pyaudio python3-pyaudio`.
 
 It currently runs on Ubuntu-based Linux systems, though we would like to
 implement cross-platform functionality soon.
@@ -35,3 +39,4 @@ Each part passes its results to the next, providing a logical program flow and
 making collaboration between our group members easier.
 
   [1]: https://github.com/brendano/stanford_corenlp_pywrapper
+  [2]: https://pypi.python.org/pypi/SpeechRecognition/
