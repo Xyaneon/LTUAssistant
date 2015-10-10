@@ -4,6 +4,7 @@ An AI assistant like Google Now, Siri, Cortana, etc. for an LTU senior project.
 This project depends on the following:
 - `espeak` for audio output
 - [stanford_corenlp_pywrapper][1] for natural language processing
+- The Stanford CoreNLP jar files, which are downloaded by setup.py
 - The Python [SpeechRecognition][2] module for voice input
   - This might also require that the PyAudio packages are installed. On Ubuntu,
   this can be done by running `sudo apt-get install python-pyaudio python3-pyaudio`.
