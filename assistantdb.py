@@ -77,7 +77,7 @@ def process_find_room(room_str, verbose):
     speak(finder_message, verbose)
 
 def parse(verb, verb_object, verbose=False):
-    browse_cmd_list = ['open', 'go to', 'browse to', 'launch', 'take me to']
+    browse_cmd_list = ['start', 'open', 'go to', 'browse to', 'launch', 'take me to']
     email_cmd_list = ['email', 'compose', 'send']
     roomfinder_cmd_list = ['find', 'find room', 'where is room']
 
