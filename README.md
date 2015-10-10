@@ -26,6 +26,7 @@ This list may expand based on whatever we have time to implement.
 
 ## How it works
 This assistant is structured into three main parts:
+
 1. Speech-to-text module
 1. Natural language processing module
 1. Command execution and database module
