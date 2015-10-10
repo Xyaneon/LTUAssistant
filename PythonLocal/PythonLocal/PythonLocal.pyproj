@@ -24,7 +24,6 @@
   <ItemGroup>
     <Compile Include="assistantdb.py" />
     <Compile Include="integrated.py" />
-    <Compile Include="PythonLocal.py" />
     <Compile Include="speech.py" />
     <Compile Include="test.py" />
   </ItemGroup>
