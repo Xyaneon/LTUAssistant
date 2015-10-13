@@ -1,6 +1,8 @@
 # Our gitignored files here:
 stanford-corenlp-full-2014-08-27.zip
 stanford-corenlp-full-2014-08-27/
+stanford_corenlp_pywrapper/
+libfix.diff
 
 
 
