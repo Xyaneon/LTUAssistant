@@ -1,0 +1,43 @@
+diff --git a/build.sh b/build.sh
+index c4048b4..8d69c13 100755
+--- a/build.sh
++++ b/build.sh
+@@ -6,7 +6,7 @@ jarfile=lib/corenlpwrapper.jar
+ rm -rf _build $jarfile
+ mkdir _build
+ 
+-CORENLP_JAR=/home/sw/corenlp/stanford-corenlp-full-2015-04-20/stanford-corenlp-3.5.2.jar
++CORENLP_JAR=./stanford-corenlp-full-2015-04-20/stanford-corenlp-3.5.2.jar
+ 
+ javac -source 7 -target 7 -d _build -cp "$(print lib/*.jar | tr ' ' ':')":$CORENLP_JAR javasrc/**/*.java
+ (cd _build && jar cf ../$jarfile .)
+diff --git a/stanford_corenlp_pywrapper/rcorenlp.r b/stanford_corenlp_pywrapper/rcorenlp.r
+index 96ba627..824160f 100644
+--- a/stanford_corenlp_pywrapper/rcorenlp.r
++++ b/stanford_corenlp_pywrapper/rcorenlp.r
+@@ -11,8 +11,8 @@ CoreNLP = function(
+             mode=NULL,
+             configdict=list(annotators="tokenize, ssplit"),
+             corenlp_jars=c(
+-                "/home/sw/corenlp/stanford-corenlp-full-2015-04-20/*",
+-                "/home/sw/stanford-srparser-2014-10-23-models.jar"),
++                "./stanford-corenlp-full-2014-08-27/*",
++                "./stanford-srparser-2014-10-23-models.jar"),
+             java_command="java",
+             java_options="-Xmx4g -XX:ParallelGCThreads=1",
+             outpipe_filename_prefix="/tmp/corenlp_rwrap_pipe",
+diff --git a/stanford_corenlp_pywrapper/sockwrap.py b/stanford_corenlp_pywrapper/sockwrap.py
+index c575693..4533464 100644
+--- a/stanford_corenlp_pywrapper/sockwrap.py
++++ b/stanford_corenlp_pywrapper/sockwrap.py
+@@ -88,8 +88,8 @@ class CoreNLP:
+     def __init__(self, mode=None, 
+             configfile=None, configdict=None,
+             corenlp_jars=(
+-                "/home/sw/corenlp/stanford-corenlp-full-2015-04-20/*",
+-                "/home/sw/stanford-srparser-2014-10-23-models.jar",
++                "./stanford-corenlp-full-2014-08-27/*",
++                "./stanford-srparser-2014-10-23-models.jar",
+                 ),
+             comm_mode='PIPE',  # SOCKET or PIPE
+             server_port=12340, outpipe_filename_prefix="/tmp/corenlp_pywrap_pipe",
