@@ -11,7 +11,7 @@ This project depends on the following:
   this can be done by running `sudo apt-get install python-pyaudio python3-pyaudio`.
   - It also may require flac command line tools. On Ubuntu, this can
   be done by running `sudo apt-get install flac`
-All of these are downloaded and installed by setup.py, as long as you have git installed.
+All of these are downloaded and installed by running `setup.sh`, as long as you have git installed.
 
 It currently runs on Ubuntu-based Linux systems, though we would like to
 implement cross-platform functionality soon.
