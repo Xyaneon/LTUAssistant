@@ -76,10 +76,10 @@ def process_find_room(room_str, verbose):
         finder_message = 'Sorry, but I don\'t think you told me which room you want.'
     speak(finder_message, verbose)
 
-def parse(verb, verb_object, verbose=False):
-    browse_cmd_list = ['start', 'open', 'go to', 'browse to', 'launch', 'take me to']
+def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
+    browse_cmd_list = ['start', 'open', 'go to', 'browse to', 'launch', 'take to']
     email_cmd_list = ['email', 'compose', 'send']
-    roomfinder_cmd_list = ['find', 'find room', 'where is room']
+    roomfinder_cmd_list = ['find', 'where is']
 
     if verb in browse_cmd_list:
         # Open an indicated web page in the default browser
