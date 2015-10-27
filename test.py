@@ -21,6 +21,19 @@ def GetVerb(parsed):
 				return (word, word+1) #parsed["tokens"][word]
 			#(parsed["lemmas"][word], parsed["tokens"][word], parsed["pos"][word])
 
+# Support sentences such as "Tell me where room S202 is"
+# Previously would find "Tell" as verb and "me" as subject, and not see anything else at all. The tell me isn't relevant here though
+# Searches for a ccomp to hopefully find the real verb
+def ConfirmVerb(parsed, verb):
+	newverbcheck = FindDependency(parsed, verb, "ccomp")
+	if newverbcheck and parsed["pos"][newverbcheck[0]].startswith("V"):
+		# this finds the word "where" based on the is
+		otherThing = FindDependency(parsed, newverbcheck, "advmod")
+		if otherThing:
+			return otherThing, newverbcheck
+	return verb
+
+
 def FindDependency(parsed, verbPos, depType):
 	for dep in parsed["deps_basic"]:
 		if dep[0] == depType and dep[1] in range(verbPos[0], verbPos[1]):
@@ -51,7 +64,6 @@ def GetExtra(parsed, verbPos):
 	newVerb = newSubject = None
 	prep = FindDependency(parsed, verbPos, "prep")
 	if not prep:
-		print("Searching for xcomp")
 		newVerb = FindDependency(parsed, verbPos, "xcomp")
 		prep = FindDependency(parsed, newVerb, "prep")
 	if prep:
@@ -76,12 +88,19 @@ def GetWords(parsed, wordPositions):
 
 def Parse(text):
 	parsed = ParseText(text)["sentences"]
-	verb = noun = newNoun = newVerb = prep = None
+	verb = noun = newNoun = newVerb = prep = otherThing = None
 	for sentence in parsed:
 		print(sentence)
 		verb = GetVerb(sentence)
 		if verb:
 			print(GetWords(sentence, verb))
+
+			# support some fancier sentences
+			otherThing, newverbcheck = ConfirmVerb(sentence, verb)
+			if otherThing and newverbcheck:
+				verb = newverbcheck
+				print("Changing verb to %s" % GetWords(sentence, verb))
+
 			noun = GetSubject(sentence, verb)
 			if noun:
 				print(GetWords(sentence, noun))
@@ -99,7 +118,11 @@ def Parse(text):
 			print("Could not find any verbs")
 		# just return the first sentence only for now
 		print("\n")
-		return GetWords(sentence, verb), GetWords(sentence, noun), GetWords(sentence, newNoun), GetWords(sentence, newVerb), GetWords(sentence, prep)
+
+		finalVerb = GetWords(sentence, verb)
+		if otherThing:
+			finalVerb = "%s %s" % (GetWords(sentence, otherThing), finalVerb)
+		return finalVerb, GetWords(sentence, noun), GetWords(sentence, newNoun), GetWords(sentence, newVerb), GetWords(sentence, prep)
 	
 
 
