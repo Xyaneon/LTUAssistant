@@ -1,14 +1,21 @@
 #!/usr/bin/python3
 
 import argparse
+import notify2
 import subprocess
 import sys
 import webbrowser
+
+notify2.init('LTU Assistant')
 
 def speak(message, also_cmd=False):
     '''Speak the given message using the text-to-speech backend.'''
     if also_cmd:
         print(message)
+    notification = notify2.Notification('LTU Assistant',
+                                        message,
+                                        'notification-message-im')
+    notification.show()
     subprocess.call('espeak "' + message + '"', shell=True)
 
 def process_website(site_name, verbose):
@@ -29,7 +36,7 @@ def process_website(site_name, verbose):
     elif site_name in ['calendar', 'schedule', 'events']:
         speak('Opening Google Calendar...', verbose)
         webbrowser.open('https://calendar.google.com')
-	# Khalil added this 
+	# Khalil added this
     elif site_name == 'weather':
         speak('Opening Google weather...', verbose)
         webbrowser.open('http://www.weather.com/weather/today/l/USMI0283:1:US')
@@ -84,7 +91,7 @@ def process_find_room(room_str, verbose):
     speak(finder_message, verbose)
 
 def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
-    browse_cmd_list = ['start', 'open', 'go', 'go to', 'browse', 'browse to', 'launch', 'take to', 'show'] #Original verb only + addition verb 'show' 
+    browse_cmd_list = ['start', 'open', 'go', 'go to', 'browse', 'browse to', 'launch', 'take to', 'show'] #Original verb only + addition verb 'show'
     email_cmd_list = ['email', 'compose', 'send']
     roomfinder_cmd_list = ['find', 'where is']
 
