@@ -40,6 +40,9 @@ def process_website(site_name, verbose):
     elif site_name == 'weather':
         speak('Opening Google weather...', verbose)
         webbrowser.open('http://www.weather.com/weather/today/l/USMI0283:1:US')
+	# call function to retrieve web sourcecode as a string
+	# search the string for keyword
+	# display
     elif site_name in ['events', 'event']:
         speak('Opening ltu events...', verbose)
         webbrowser.open('http://www.ltu.edu/myltu/calendar.asp')
