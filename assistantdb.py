@@ -29,6 +29,13 @@ def process_website(site_name, verbose):
     elif site_name in ['calendar', 'schedule', 'events']:
         speak('Opening Google Calendar...', verbose)
         webbrowser.open('https://calendar.google.com')
+	# Khalil added this 
+    elif site_name == 'weather':
+        speak('Opening Google weather...', verbose)
+        webbrowser.open('http://www.weather.com/weather/today/l/USMI0283:1:US')
+    elif site_name in ['events', 'event']:
+        speak('Opening ltu events...', verbose)
+        webbrowser.open('http://www.ltu.edu/myltu/calendar.asp')
     else:
         speak('Opening website: ' + site_name, verbose)
         webbrowser.open(site_name)
@@ -77,7 +84,7 @@ def process_find_room(room_str, verbose):
     speak(finder_message, verbose)
 
 def parse(verb, verb_object, verbose=False):
-    browse_cmd_list = ['start', 'open', 'go to', 'browse to', 'launch', 'take me to']
+    browse_cmd_list = ['start', 'open', 'go', 'browse', 'launch', 'take me', 'show'] #Original verb only + addition verb 'show' 
     email_cmd_list = ['email', 'compose', 'send']
     roomfinder_cmd_list = ['find', 'find room', 'where is room']
 
