@@ -5,6 +5,7 @@ import notify2
 import subprocess
 import sys
 import webbrowser
+import web
 
 notify2.init('LTU Assistant')
 
