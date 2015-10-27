@@ -83,13 +83,8 @@ def process_find_room(room_str, verbose):
         finder_message = 'Sorry, but I don\'t think you told me which room you want.'
     speak(finder_message, verbose)
 
-<<<<<<< HEAD
-def parse(verb, verb_object, verbose=False):
-    browse_cmd_list = ['start', 'open', 'go', 'browse', 'launch', 'take me', 'show'] #Original verb only + addition verb 'show' 
-=======
 def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
-    browse_cmd_list = ['start', 'open', 'go to', 'browse to', 'launch', 'take to']
->>>>>>> 4a17e33cf5e541bde86c312a06bd3f38a08f75b8
+    browse_cmd_list = ['start', 'open', 'go', 'go to', 'browse', 'browse to', 'launch', 'take to', 'show'] #Original verb only + addition verb 'show' 
     email_cmd_list = ['email', 'compose', 'send']
     roomfinder_cmd_list = ['find', 'where is']
 
@@ -117,5 +112,5 @@ if __name__ == '__main__':
 
     if args.verbose:
         print(sys.version)
-    parse(args.verb, args.verb_object, args.verbose)
+    parse(args.verb, args.verb_object, None, None, args.verbose)
     exit()
