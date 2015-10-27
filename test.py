@@ -65,7 +65,8 @@ def GetExtra(parsed, verbPos):
 	prep = FindDependency(parsed, verbPos, "prep")
 	if not prep:
 		newVerb = FindDependency(parsed, verbPos, "xcomp")
-		prep = FindDependency(parsed, newVerb, "prep")
+		if newVerb:
+			prep = FindDependency(parsed, newVerb, "prep")
 	if prep:
 		newSubject = FindDependency(parsed, prep, "pobj")
 		if not newSubject:
