@@ -94,6 +94,7 @@ def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
     browse_cmd_list = ['start', 'open', 'go', 'go to', 'browse', 'browse to', 'launch', 'take to', 'show'] #Original verb only + addition verb 'show'
     email_cmd_list = ['email', 'compose', 'send']
     roomfinder_cmd_list = ['find', 'where is']
+    calendar_cmd_list = ['schedule', 'remind me']
 
     if verb in browse_cmd_list:
         # Open an indicated web page in the default browser
