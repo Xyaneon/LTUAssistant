@@ -13,7 +13,7 @@ def Integrate(optional_message = None):
 		if not success:
 			print(sentence)
 			exit()
-	sentence = sentence.replace("Start", "start").replace("open", "Open")
+	sentence = sentence.replace("Start", "start").replace("open", "Open").replace("Show", "show").replace("Please", "").replace("please", "")
 	(verb, verb_object, noun2, verb2, preposition) = test.Parse(sentence)
 	if preposition:
 		verb = "%s %s" % (verb, preposition)
