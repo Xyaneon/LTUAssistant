@@ -2,7 +2,7 @@
 
 import sys
 import speech
-import test
+import CoreNLP
 import assistantdb
 
 def Integrate(optional_message = None):
@@ -14,7 +14,7 @@ def Integrate(optional_message = None):
 			print(sentence)
 			exit()
 	sentence = sentence.replace("Start", "start").replace("open", "Open").replace("Show", "show").replace("Please", "").replace("please", "")
-	(verb, verb_object, noun2, verb2, preposition) = test.Parse(sentence)
+	(verb, verb_object, noun2, verb2, preposition) = CoreNLP.Parse(sentence)
 	if preposition:
 		verb = "%s %s" % (verb, preposition)
 		verb_object = noun2
