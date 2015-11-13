@@ -1,3 +1,13 @@
+# This file does the CoreNLP parsing
+# It takes a sentence, uses the CoreNLP wrapper to parse it, and analyzes the parts
+#  - Wrapper is here: https://github.com/brendano/stanford_corenlp_pywrapper
+# the things we are interested are the "pos" part (parts of speech),
+#  - Documented here: http://www.comp.leeds.ac.uk/amalgam/tagsets/upenn.html
+# and the "deps_basic" part, which contains the relationship between words
+#  - Documented here: http://nlp.stanford.edu/software/dependencies_manual.pdf
+# Using both of these, it can find the most relevant noun and verb to be parsed
+
+
 from stanford_corenlp_pywrapper import CoreNLP
 
 print("************************************************** Loading CoreNLP **************************************************")
@@ -10,6 +20,8 @@ def ParseText(text):
 	return proc.parse_doc(text)
 
 
+# Looks for the first word in the sentence with a part of speech starting in "V"
+# Returns that verb, and also the word before that if it is an adverb / determiner
 def GetVerb(parsed):
 	for word in range(len(parsed["tokens"])):
 		# found a verb
@@ -33,14 +45,17 @@ def ConfirmVerb(parsed, verb):
 			return otherThing, newverbcheck
 	return verb
 
-
+# This function searches "deps_basic" to find relationships between words
+# It is passed in the position of the word(s) that we relationship is on
+# And then searches for any dependencies of the type we want on those words
 def FindDependency(parsed, verbPos, depType):
 	for dep in parsed["deps_basic"]:
 		if dep[0] == depType and dep[1] in range(verbPos[0], verbPos[1]):
 			return (dep[2], dep[2]+1)
 
+# Look for the subject of a sentence (based on a verb we already found)
 def GetSubject(parsed, verbPos):
-	# Try and do some actual sentence parsing, looking for the subject
+	# Look for noun subject / direct object of the verb
 	ret = FindDependency(parsed, verbPos, "nsubj")
 	if ret:
 		return ret
@@ -49,6 +64,7 @@ def GetSubject(parsed, verbPos):
 		return ret
 
 	# That failed, just return the first noun it finds
+	# not very good, this may not be necessary since every sentence I have tried always has a nsubj or dobj on the verb
 	nounStart = None
 	for word in range(len(parsed["tokens"][verbPos[1]:])):
 		if nounStart:
@@ -60,28 +76,31 @@ def GetSubject(parsed, verbPos):
 		return (nounStart, len(parsed["tokens"])-1)
 
 # Get Extra data, checking for prepositions that modify things
+# Parses some more advanced sentences, with multiple verbs and nouns
 def GetExtra(parsed, verbPos):
 	newVerb = newSubject = None
+	# Find the preposition, and the verb that depends on that preposition
 	prep = FindDependency(parsed, verbPos, "prep")
 	if not prep:
 		newVerb = FindDependency(parsed, verbPos, "xcomp")
 		if newVerb:
 			prep = FindDependency(parsed, newVerb, "prep")
+	# Find the subject based on that preposition
 	if prep:
 		newSubject = FindDependency(parsed, prep, "pobj")
 		if not newSubject:
 			# not sure if this is possible
 			print("Error parsing preposition")
 			return
+		# Unfinished, look for time stuff here
 		time = FindDependency(parsed, newSubject, "num")
 		if time and time[0] < newSubject[1]:
 			newSubject = (time[0], newSubject[1])
 
 		#newVerb = FindDependency(parsed, prep, "dobj")
 	return newSubject, newVerb, prep
-		
-	
 
+# helper function to get / parse a thing we found
 def GetWords(parsed, wordPositions):
 	if not wordPositions:
 		return ""
@@ -90,6 +109,7 @@ def GetWords(parsed, wordPositions):
 def Parse(text):
 	parsed = ParseText(text)["sentences"]
 	verb = noun = newNoun = newVerb = prep = otherThing = None
+	# Search through all sentences, but we only actually use the first one
 	for sentence in parsed:
 		print(sentence)
 		verb = GetVerb(sentence)
