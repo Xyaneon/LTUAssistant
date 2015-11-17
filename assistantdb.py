@@ -28,7 +28,7 @@ def process_website(site_name, verbose):
 	# Khalil added this
     elif site_name == 'weather':
         degrees, status = web.GetWeatherInfo()
-	speech.speak("It is " + degrees + " and " + status)
+	speech.speak("It is " + degrees + " degrees and " + status.lower() + ".", verbose)
     elif site_name in ['ltu events', 'ltu event']:
         speech.speak('Opening ltu events...', verbose)
         webbrowser.open('http://www.ltu.edu/myltu/calendar.asp')
