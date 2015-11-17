@@ -1,51 +1,39 @@
 #!/usr/bin/python3
 
 import argparse
-import notify2
+import speech
 import subprocess
 import sys
 import webbrowser
 import web
 
-notify2.init('LTU Assistant')
-
-def speak(message, also_cmd=False):
-    '''Speak the given message using the text-to-speech backend.'''
-    if also_cmd:
-        print(message)
-    notification = notify2.Notification('LTU Assistant',
-                                        message,
-                                        'notification-message-im')
-    notification.show()
-    subprocess.call('espeak "' + message + '"', shell=True)
-
 def process_website(site_name, verbose):
     '''Take appropriate action with the given site name.
     The site_name can either be an actual website name or a valid URL.'''
     if site_name in ['bannerweb', 'banner', 'registration', 'financial aid']:
-        speak('Opening BannerWeb...', verbose)
+        speech.speak('Opening BannerWeb...', verbose)
         webbrowser.open('https://www.ltu.edu/bannerweb')
     elif site_name in ['blackboard', 'bb']:
-        speak('Opening BlackBoard...', verbose)
+        speech.speak('Opening BlackBoard...', verbose)
         webbrowser.open('https://my.ltu.edu')
     elif site_name in ['ltu.edu', 'ltu website', 'ltu homepage']:
-        speak('Opening the main LTU website...', verbose)
+        speech.speak('Opening the main LTU website...', verbose)
         webbrowser.open('http://www.ltu.edu')
     elif site_name in ['email', 'webmail', 'mail', 'gmail']:
-        speak('Opening Gmail...', verbose)
+        speech.speak('Opening Gmail...', verbose)
         webbrowser.open('https://gmail.com')
     elif site_name in ['calendar', 'schedule', 'events']:
-        speak('Opening Google Calendar...', verbose)
+        speech.speak('Opening Google Calendar...', verbose)
         webbrowser.open('https://calendar.google.com')
 	# Khalil added this
     elif site_name == 'weather':
         degrees, status = web.GetWeatherInfo()
-	speak("It is " + degrees + " and " + status)
+	speech.speak("It is " + degrees + " and " + status)
     elif site_name in ['ltu events', 'ltu event']:
-        speak('Opening ltu events...', verbose)
+        speech.speak('Opening ltu events...', verbose)
         webbrowser.open('http://www.ltu.edu/myltu/calendar.asp')
     else:
-        speak('Opening website: ' + site_name, verbose)
+        speech.speak('Opening website: ' + site_name, verbose)
         webbrowser.open(site_name)
 
 def process_send_email(recipient_info, verbose):
@@ -54,7 +42,7 @@ def process_send_email(recipient_info, verbose):
         recipient = 'mailto:' + recipient_info  # Open default email client
     else:
         recipient = 'https://mail.google.com/mail/u/0/#compose' # Gmail
-    speak('Composing an email...', verbose)
+    speech.speak('Composing an email...', verbose)
     webbrowser.open(recipient)
 
 def process_find_room(room_str, verbose):
@@ -89,7 +77,7 @@ def process_find_room(room_str, verbose):
             finder_message = 'Sorry, but I don\'t think that\'s a valid room number.'
     else:
         finder_message = 'Sorry, but I don\'t think you told me which room you want.'
-    speak(finder_message, verbose)
+    speech.speak(finder_message, verbose)
 
 def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
     browse_cmd_list = ['start', 'open', 'go', 'go to', 'browse', 'browse to', 'launch', 'take to', 'show'] #Original verb only + addition verb 'show'
@@ -106,7 +94,7 @@ def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
         # Tell the user which building and floor a room is in
         process_find_room(verb_object, verbose)
     else:
-        speak('Sorry, I don\'t understand what you want.', verbose)
+        speech.speak('Sorry, I don\'t understand what you want.', verbose)
 
 # For executing this module on its own:
 if __name__ == '__main__':
