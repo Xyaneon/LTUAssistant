@@ -10,9 +10,9 @@
 
 from stanford_corenlp_pywrapper import CoreNLP
 
-print("************************************************** Loading CoreNLP **************************************************")
+print("************************* Loading CoreNLP *****************************")
 proc = CoreNLP("parse")
-print("************************************************** CoreNLP loaded! **************************************************")
+print("************************* CoreNLP loaded! *****************************")
 
 
 
@@ -144,7 +144,7 @@ def Parse(text):
 		if otherThing:
 			finalVerb = "%s %s" % (GetWords(sentence, otherThing), finalVerb)
 		return finalVerb, GetWords(sentence, noun), GetWords(sentence, newNoun), GetWords(sentence, newVerb), GetWords(sentence, prep)
-	
+
 
 
 
