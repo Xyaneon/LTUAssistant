@@ -118,6 +118,11 @@ def process_add_cal_event(event_str, verbose):
 
 
 def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
+    # Print parameters for debugging purposes
+    print('\tverb:           ' + verb)
+    print('\tverb_object:    ' + verb_object)
+    print('\talternate_verb: ' + alternate_verb)
+    print('\talternate_noun: ' + alternate_noun)
     browse_cmd_list = ['start', 'open', 'go', 'go to', 'browse', 'browse to', 'launch', 'take to', 'show'] #Original verb only + addition verb 'show'
     email_cmd_list = ['email', 'compose', 'send']
     roomfinder_cmd_list = ['find', 'where is']
