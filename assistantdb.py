@@ -34,10 +34,10 @@ def process_website(site_name, verbose):
     elif site_name in ['calendar', 'schedule', 'events']:
         speech.speak('Opening Google Calendar...', verbose)
         webbrowser.open('https://calendar.google.com')
-	# Khalil added this
+    # Khalil added this
     elif site_name == 'weather':
         degrees, status = web.GetWeatherInfo()
-	speech.speak("It is " + degrees + " degrees and " + status.lower() + ".", verbose)
+        speech.speak("It is " + degrees + " degrees and " + status.lower() + ".", verbose)
     elif site_name in ['ltu events', 'ltu event']:
         speech.speak('Opening ltu events...', verbose)
         webbrowser.open('http://www.ltu.edu/myltu/calendar.asp')
