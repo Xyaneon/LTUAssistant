@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 
 import argparse
+import calendardb
 import notify2
+import speech  # Used here for interactive questions
 import subprocess
 import sys
 import webbrowser
@@ -90,6 +92,31 @@ def process_find_room(room_str, verbose):
         finder_message = 'Sorry, but I don\'t think you told me which room you want.'
     speak(finder_message, verbose)
 
+def process_add_cal_event(event_str, verbose):
+    '''Schedule a new calendar event with the user.'''
+    if event_str == 'event':
+        speak('Okay, what is the event called?', verbose)
+        (success, event_sentence) = speech.Listen()
+        if not success:
+            speak('Sorry, I didn\'t catch that.', verbose)
+            return
+        speak('What day will this be on?', verbose)
+        (success, day_sentence) = speech.Listen()
+        if not success:
+            speak('Sorry, I didn\'t catch that.', verbose)
+            return
+        speak('What time will this start at?', verbose)
+        (success, time_sentence) = speech.Listen()
+        if not success:
+            speak('Sorry, I didn\'t catch that.', verbose)
+            return
+        calendardb.add_event([event_sentence, day_sentence, time_sentence])
+        feedback_sentence = 'Alright, I\'m putting down ' + event_sentence + ' for ' + day_sentence + ' at ' + time_sentence + '.'
+        speak(feedback_sentence, verbose)
+    else:
+        speak('Sorry, I am unable to help you schedule this right now.', verbose)
+
+
 def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
     browse_cmd_list = ['start', 'open', 'go', 'go to', 'browse', 'browse to', 'launch', 'take to', 'show'] #Original verb only + addition verb 'show'
     email_cmd_list = ['email', 'compose', 'send']
@@ -105,6 +132,9 @@ def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
     elif verb in roomfinder_cmd_list:
         # Tell the user which building and floor a room is in
         process_find_room(verb_object, verbose)
+    elif verb in calendar_cmd_list:
+        # Schedule an event for the user
+        process_add_cal_event(verb_object, verbose)
     else:
         speak('Sorry, I don\'t understand what you want.', verbose)
 
