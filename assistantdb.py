@@ -22,6 +22,9 @@ def process_website(site_name, verbose):
     elif site_name in ['help desk', 'helpdesk', 'tech support', 'ehelp']:
         speech.speak('Opening LTU eHelp homepage...', verbose)
         webbrowser.open('http://www.ltu.edu/ehelp/')
+    elif site_name in ['password', 'mypassword']:
+        speech.speak('Opening MyPassword web service...', verbose)
+        webbrowser.open('https://mypassword.campus.ltu.edu/')
     elif site_name in ['ltu.edu', 'ltu website', 'ltu homepage']:
         speech.speak('Opening the main LTU website...', verbose)
         webbrowser.open('http://www.ltu.edu')
