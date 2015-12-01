@@ -8,6 +8,7 @@ import assistantdb
 def Integrate(optional_message = None):
     if optional_message:
         sentence = optional_message
+		print "Text input provided: '" + optional_message + "'"
     else:
         speech.speak('What can I help you with?', True)
         (success, sentence) = speech.listen()
