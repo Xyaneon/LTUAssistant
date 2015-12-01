@@ -36,10 +36,14 @@ def speak(message, also_cmd=False):
     '''Speak the given message using the text-to-speech backend.'''
     if also_cmd:
         print(message)
-    notification = notify2.Notification('LTU Assistant',
-                                        message,
-                                        'notification-message-im')
-    notification.show()
+    try:
+        notification = notify2.Notification('LTU Assistant',
+                                            message,
+                                            'notification-message-im')
+        notification.show()
+    except dbus.exceptions.DBusException:
+        if not also_cmd:
+            print(message)
     subprocess.call('espeak "' + message + '"', shell=True)
 
 def ask_question(question, also_cmd=False):
