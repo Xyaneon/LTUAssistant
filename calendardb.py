@@ -2,6 +2,15 @@
 
 import csv
 
+class CalendarEvent():
+    '''Class for storing calendar event information.'''
+    def __init__(self, event_str='', date_str='', start_time_str='', end_time_str=''):
+        '''Initialize this CalendarEvent instance.'''
+        self.event_str = event_str
+        self.date_str = date_str
+        self.start_time_str = start_time_str
+        self.end_time_str = end_time_str
+
 def read_events():
     '''Returns a list of scheduled events from the calendar DB CSV file.'''
     event_list = []

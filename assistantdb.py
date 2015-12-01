@@ -93,26 +93,14 @@ def process_find_room(room_str, verbose):
 def process_add_cal_event(event_str, verbose):
     '''Schedule a new calendar event with the user.'''
     if event_str == 'event':
-        speak('Okay, what is the event called?', verbose)
-        (success, event_sentence) = speech.Listen()
-        if not success:
-            speak('Sorry, I didn\'t catch that.', verbose)
-            return
-        speak('What day will this be on?', verbose)
-        (success, day_sentence) = speech.Listen()
-        if not success:
-            speak('Sorry, I didn\'t catch that.', verbose)
-            return
-        speak('What time will this start at?', verbose)
-        (success, time_sentence) = speech.Listen()
-        if not success:
-            speak('Sorry, I didn\'t catch that.', verbose)
-            return
+        event_sentence = speech.ask_question('Okay, what is the event called?', verbose)
+        day_sentence = speech.ask_question('What day will this be on?', verbose)
+        time_sentence = speech.ask_question('What time will this start at?', verbose)
         calendardb.add_event([event_sentence, day_sentence, time_sentence])
         feedback_sentence = 'Alright, I\'m putting down ' + event_sentence + ' for ' + day_sentence + ' at ' + time_sentence + '.'
-        speak(feedback_sentence, verbose)
+        speech.speak(feedback_sentence, verbose)
     else:
-        speak('Sorry, I am unable to help you schedule this right now.', verbose)
+        speech.speak('Sorry, I am unable to help you schedule this right now.', verbose)
 
 
 def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
