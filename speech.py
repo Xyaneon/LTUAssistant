@@ -13,6 +13,7 @@ def listen():
     r = sr.Recognizer()
     ret = ""
     with sr.Microphone() as source:
+		r.adjust_for_ambient_noise(source)
         print("Say something!")
         audio = r.listen(source)
 
