@@ -48,20 +48,26 @@ def ConfirmVerb(parsed, verb):
 # This function searches "deps_basic" to find relationships between words
 # It is passed in the position of the word(s) that we relationship is on
 # And then searches for any dependencies of the type we want on those words
-def FindDependency(parsed, verbPos, depType):
+def FindDependency(parsed, pos, depType):
 	for dep in parsed["deps_basic"]:
-		if dep[0] == depType and dep[1] in range(verbPos[0], verbPos[1]):
+		if dep[0] == depType and dep[1] in range(pos[0], pos[1]):
 			return (dep[2], dep[2]+1)
 
 # Look for the subject of a sentence (based on a verb we already found)
 def GetSubject(parsed, verbPos):
+	# Make sure it finds the entire subject for things like "ltu events"
+	def ExtendSubject(parsed, nounPos):
+		ret = FindDependency(parsed, nounPos, "nn")
+		if ret and ret[0] < nounPos[1]:
+			return (ret[0], nounPos[1])
+		return nounPos
 	# Look for noun subject / direct object of the verb
 	ret = FindDependency(parsed, verbPos, "nsubj")
 	if ret:
-		return ret
+		return ExtendSubject(parsed, ret)
 	ret = FindDependency(parsed, verbPos, "dobj")
 	if ret:
-		return ret
+		return ExtendSubject(parsed, ret)
 
 	# That failed, just return the first noun it finds
 	# not very good, this may not be necessary since every sentence I have tried always has a nsubj or dobj on the verb
