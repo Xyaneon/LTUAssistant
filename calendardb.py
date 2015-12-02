@@ -2,13 +2,21 @@
 
 import csv, datetime, os
 
-calendar_csv_path = os.path.join(os.path.expanduser('~'),
-                                 '.LTUAssistant',
-                                 'calendar.csv')
+# Initialize CSV file path
+folder = os.path.join(os.path.expanduser('~'), '.LTUAssistant')
+try:
+    os.makedirs(folder)
+except OSError:
+    if not os.path.isdir(folder):
+        raise
+calendar_csv_path = os.path.join(folder, 'calendar.csv')
 
 def convert_str_to_date(date_str):
     '''Converts a string object to a datetime object.'''
-    return datetime.strptime(date_str, '%B %d %Y')
+    part_list = date_str.split()
+    day = part_list[1].replace('th', '').replace('rd', '').replace('st', '')
+    processed_date_str = ' '.join([part_list[0], day, part_list[2]])
+    return datetime.datetime.strptime(processed_date_str, '%B %d %Y')
 
 class CalendarEvent():
     '''Class for storing calendar event information.'''

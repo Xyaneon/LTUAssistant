@@ -110,6 +110,8 @@ def process_weather(verbose):
     speech.speak("It is " + degrees + " degrees and " + status.lower() + ".", verbose)
 
 def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
+    '''Parse the command and take an action. Returns True if the command is
+    understood, and False otherwise.'''
     # Print parameters for debugging purposes
     print('\tverb:           ' + verb)
     print('\tverb_object:    ' + verb_object)
@@ -138,6 +140,8 @@ def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
             process_weather(verbose)
     else:
         speech.speak('Sorry, I don\'t understand what you want.', verbose)
+        return False
+    return True
 
 # For executing this module on its own:
 if __name__ == '__main__':
