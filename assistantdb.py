@@ -111,7 +111,7 @@ def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
     print('\talternate_verb: ' + alternate_verb)
     print('\talternate_noun: ' + alternate_noun)
     browse_cmd_list = ['start', 'open', 'go', 'go to', 'browse', 'browse to', 'launch', 'take to', 'show'] #Original verb only + addition verb 'show'
-    email_cmd_list = ['email', 'compose', 'send']
+    email_cmd_list = ['email', 'compose', 'send', 'send to', "write", "write to"]
     roomfinder_cmd_list = ['find', 'where is']
     calendar_cmd_list = ['schedule', 'remind', 'plan', 'planning'] #FIXME: remove 'planning' verb once recognition bug is solved
 
