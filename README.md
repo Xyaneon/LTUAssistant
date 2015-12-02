@@ -16,7 +16,9 @@ All of these are downloaded and installed by running `setup.sh`, as long as you 
 It currently runs on Ubuntu-based Linux systems, though we would like to
 implement cross-platform functionality soon.
 
-The main program is located in `integrated.py` at the moment.
+The main program is located in `LTUAssistant.py`. A string can be passed to it
+on the command line as an argument if you want to execute a specific command
+without speaking it.
 
 ## Features
 This AI assistant aims to be like other well-known AI assistants, but with a
