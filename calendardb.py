@@ -2,12 +2,16 @@
 
 import csv, datetime
 
+def convert_str_to_date(date_str):
+    '''Converts a string object to a datetime object.'''
+    return datetime.strptime(date_str, '%B %d %Y')
+
 class CalendarEvent():
     '''Class for storing calendar event information.'''
     def __init__(self, event_str='', date_str='', start_time_str='', end_time_str=''):
         '''Initialize this CalendarEvent instance.'''
         self.event_str = event_str
-        self.date = datetime.strptime(date_str, '%B %d %Y')
+        self.date = convert_str_to_date(date_str)
         self.start_time_str = start_time_str
         self.end_time_str = end_time_str
 
