@@ -3,6 +3,7 @@
 # NOTE: this example requires PyAudio because it uses the Microphone class
 
 import notify2
+import dbus
 import speech_recognition as sr
 import subprocess
 
