@@ -38,8 +38,7 @@ def process_website(site_name, verbose):
         webbrowser.open('https://calendar.google.com')
     # Khalil added this
     elif site_name == 'weather':
-        degrees, status = web.GetWeatherInfo()
-        speech.speak("It is " + degrees + " degrees and " + status.lower() + ".", verbose)
+        process_weather(verbose)
     elif site_name in ['ltu events', 'ltu event']:
         speech.speak('Opening ltu events...', verbose)
         webbrowser.open('http://www.ltu.edu/myltu/calendar.asp')
@@ -59,10 +58,16 @@ def process_find_room(room_str, verbose):
     '''Try to provide information for a given room number.'''
     finder_message = ''
     if room_str:
+        words = room_str.split()
+        if words[0] == "room":
+            words.remove("room")
+        if not len(words) or len(words[0]) != 4:
+            finder_message = 'Sorry, but I don\'t think you told me which room you want.'
         # TODO: Use a regular expression for better room number validity
-        if len(room_str) >= 2:
-            room_letter = room_str.upper()[0]
-            room_floor = room_str.upper()[1]
+        else:
+            print(words)
+            room_letter = words[0][0].upper()
+            room_floor = words[0][1]
             building_dict = {'A': 'Architecture Building',
                              'B': 'Business Services Building',
                              'C': 'A. Alfred Taubman Student Services Center',
@@ -83,8 +88,6 @@ def process_find_room(room_str, verbose):
                 finder_message = 'Your room is in the ' + building + ' on floor ' + room_floor + '.'
             else:
                 finder_message = 'Sorry, I don\'t know which building that is.'
-        else:
-            finder_message = 'Sorry, but I don\'t think that\'s a valid room number.'
     else:
         finder_message = 'Sorry, but I don\'t think you told me which room you want.'
     speech.speak(finder_message, verbose)
@@ -102,6 +105,9 @@ def process_add_cal_event(event_str, verbose):
     else:
         speech.speak('Sorry, I am unable to help you schedule this right now.', verbose)
 
+def process_weather(verbose):
+    degrees, status = web.GetWeatherInfo()
+    speech.speak("It is " + degrees + " degrees and " + status.lower() + ".", verbose)
 
 def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
     # Print parameters for debugging purposes
@@ -126,6 +132,10 @@ def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
     elif verb in calendar_cmd_list:
         # Schedule an event for the user
         process_add_cal_event(verb_object, verbose)
+    # This could be a few things
+    elif verb == "what is":
+        if verb_object == "weather":
+            process_weather(verbose)
     else:
         speech.speak('Sorry, I don\'t understand what you want.', verbose)
 
