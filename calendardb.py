@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 
-import csv, datetime
+import csv, datetime, os
+
+calendar_csv_path = os.path.join(os.path.expanduser('~'),
+                                 '.LTUAssistant',
+                                 'calendar.csv')
 
 def convert_str_to_date(date_str):
     '''Converts a string object to a datetime object.'''
@@ -18,7 +22,7 @@ class CalendarEvent():
 def read_events():
     '''Returns a list of CalendarEvents from the calendar DB CSV file.'''
     event_list = []
-    with open('calendar.csv', 'rb') as calendar_csv:
+    with open(calendar_csv_path, 'rb') as calendar_csv:
         calreader = csv.reader(calendar_csv, delimiter=',', quotechar='"')
         for row in calreader:
             print(', '.join(row))
@@ -34,7 +38,7 @@ def get_todays_events():
 def add_event(ce):
     '''Adds a new event in list form to the calendar DB CSV file.
     Takes a CalendarEvent object.'''
-    with open('calendar.csv', 'wb') as calendar_csv:
+    with open(calendar_csv_path, 'wb') as calendar_csv:
         calwriter = csv.writer(calendar_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         cal_row = [ce.event_str,
                    ce.date.strftime('%B %d %Y'),
