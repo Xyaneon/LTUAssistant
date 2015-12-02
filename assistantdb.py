@@ -44,8 +44,7 @@ def process_website(site_name, verbose):
         speech.speak('Opening ltu events...', verbose)
         webbrowser.open('http://www.ltu.edu/myltu/calendar.asp')
     else:
-        speech.speak('Opening website: ' + site_name, verbose)
-        webbrowser.open(site_name)
+        speech.speak("I couldn't understand what website you want to open"))
 
 def process_send_email(recipient_info, verbose):
     '''Take appropriate action with the given email recipient information.'''
