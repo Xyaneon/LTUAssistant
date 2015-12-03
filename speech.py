@@ -9,30 +9,6 @@ import subprocess
 
 notify2.init('LTU Assistant')
 
-def listen():
-    # obtain audio from the microphone
-    r = sr.Recognizer()
-    ret = ""
-    with sr.Microphone() as source:
-        r.adjust_for_ambient_noise(source)
-        print("Say something!")
-        audio = r.listen(source)
-
-    # recognize speech using Google Speech Recognition
-    try:
-        # for testing purposes, we're just using the default API key
-        # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
-        # instead of `r.recognize_google(audio)`
-        print("Got text, sending to Google")
-        sentence = r.recognize_google(audio)
-        print("Google Speech Recognition thinks you said " + r.recognize_google(audio))
-        return True, sentence
-    except sr.UnknownValueError:
-        ret = "Google Speech Recognition could not understand audio"
-    except sr.RequestError:
-        ret = "Could not request results from Google Speech Recognition service"
-    return False, ret
-
 def speak(message, also_cmd=False):
     '''Speak the given message using the text-to-speech backend.'''
     if also_cmd:
@@ -46,6 +22,31 @@ def speak(message, also_cmd=False):
         if not also_cmd:
             print(message)
     subprocess.call('espeak "' + message + '"', shell=True)
+
+def listen():
+    # obtain audio from the microphone
+    r = sr.Recognizer()
+    ret = ""
+    with sr.Microphone() as source:
+        r.adjust_for_ambient_noise(source)
+        print("Say something!")
+        # Timeout after 10 seconds, in case this doesn't work
+        audio = r.listen(source, 10)
+
+    # recognize speech using Google Speech Recognition
+    try:
+        # for testing purposes, we're just using the default API key
+        # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
+        # instead of `r.recognize_google(audio)`
+        print("Got text, sending to Google")
+        sentence = r.recognize_google(audio)
+        print("Google Speech Recognition thinks you said " + sentence)
+        return True, sentence
+    except sr.UnknownValueError:
+        ret = "Google Speech Recognition could not understand audio."
+    except sr.RequestError:
+        ret = "Could not request results from Google Speech Recognition."
+    return False, ret
 
 def ask_question(question, also_cmd=False):
     '''Ask the user a question and return the reply as a string.'''

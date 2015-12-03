@@ -13,7 +13,7 @@ def Integrate(optional_message = None):
         speech.speak('What can I help you with?', True)
         (success, sentence) = speech.listen()
         if not success:
-            print(sentence)
+            speech.speak(sentence, True)
             exit()
     sentence = sentence.replace("Start", "start").replace("open", "Open").replace("Show", "show").replace("Please", "").replace("please", "")
     (verb, verb_object, noun2, verb2, preposition) = CoreNLP.Parse(sentence)
