@@ -13,6 +13,13 @@ calendar_csv_path = os.path.join(folder, 'calendar.csv')
 
 def convert_str_to_date(date_str):
     '''Converts a string object to a datetime object.'''
+    if date_str.lowercase() == 'tomorrow':
+        return datetime.date.today() + datetime.timedelta(days=1)
+    elif date_str.lowercase() == 'today':
+        return datetime.date.today()
+    elif date_str.lowercase() == 'yesterday':
+        return datetime.date.today() + datetime.timedelta(days=-1)
+    # Otherwise, process as a three-part date
     part_list = date_str.split()
     day = part_list[1].replace('th', '').replace('rd', '').replace('st', '')
     processed_date_str = ' '.join([part_list[0], day, part_list[2]])
