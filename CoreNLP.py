@@ -43,7 +43,7 @@ def ConfirmVerb(parsed, verb):
 		otherThing = FindDependency(parsed, newverbcheck, "advmod")
 		if otherThing:
 			return otherThing, newverbcheck
-	return verb
+	return None, None
 
 # This function searches "deps_basic" to find relationships between words
 # It is passed in the position of the word(s) that we relationship is on
