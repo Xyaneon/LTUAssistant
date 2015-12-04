@@ -4,6 +4,7 @@
 
 import notify2
 import dbus
+import settings
 import speech_recognition as sr
 import subprocess
 
@@ -24,7 +25,12 @@ def speak(message, also_cmd=False):
         if not also_cmd:
             print(message)
     if not text_only_mode:
-        subprocess.call('espeak "' + message + '"', shell=True)
+        if settings.voice == 'female':
+            # Speak using a female voice
+            subprocess.call('espeak -v+f1 "' + message + '"', shell=True)
+        else:
+            # Default to male voice
+            subprocess.call('espeak "' + message + '"', shell=True)
 
 def listen():
     '''Gets a command from the user, either via the microphone or command line
