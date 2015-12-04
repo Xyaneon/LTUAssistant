@@ -18,6 +18,7 @@ day_values = {'monday': 0,
               'friday': 4,
               'saturday': 5,
               'sunday': 6}
+DATE_STR_FMT = '%B %d %Y'
 
 # Based on http://stackoverflow.com/a/6558571/3775798
 def next_weekday(weekday, d=datetime.datetime.now()):
@@ -45,7 +46,7 @@ def convert_str_to_date(date_str):
     part_list = date_str.split()
     day = part_list[1].replace('th', '').replace('rd', '').replace('st', '')
     processed_date_str = ' '.join([part_list[0], day, part_list[2]])
-    return datetime.datetime.strptime(processed_date_str, '%B %d %Y')
+    return datetime.datetime.strptime(processed_date_str, DATE_STR_FMT)
 
 class CalendarEvent():
     '''Class for storing calendar event information.'''
@@ -55,6 +56,18 @@ class CalendarEvent():
         self.date = convert_str_to_date(date_str)
         self.start_time_str = start_time_str
         self.end_time_str = end_time_str
+
+    def __str__(self):
+        '''Returns the string representation of this CalendarEvent.'''
+        date_str = datetime.datetime.strftime(self.date, DATE_STR_FMT)
+        ret = ' '.join([self.event_str, 'on', date_str])
+        if self.start_time_str:
+            if self.end_time_str:
+                ret = ' '.join([ret, 'from', self.start_time_str, 'to',
+                                self.end_time_str])
+            else:
+                ret = ' '.join([ret, 'at', self.start_time_str])
+        return ret
 
 def read_events():
     '''Returns a list of CalendarEvents from the calendar DB CSV file.'''

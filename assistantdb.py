@@ -100,7 +100,7 @@ def process_add_cal_event(event_str, verbose):
         time_sentence = speech.ask_question('What time will this start at?', verbose)
         cal_event = calendardb.CalendarEvent(event_sentence, day_sentence, time_sentence, '')
         calendardb.add_event(cal_event)
-        feedback_sentence = 'Alright, I\'m putting down ' + event_sentence + ' for ' + day_sentence + ' at ' + time_sentence + '.'
+        feedback_sentence = 'Alright, I\'m putting down ' + str(cal_event) + '.'
         speech.speak(feedback_sentence, verbose)
     else:
         speech.speak('Sorry, I am unable to help you schedule this right now.', verbose)
