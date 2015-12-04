@@ -105,3 +105,13 @@ def add_event(ce):
                    ce.start_time_str,
                    ce.end_time_str]
         calwriter.writerow(cal_row)
+
+def get_current_time():
+    '''Returns a printable string for the current time.'''
+    current_time = datetime.datetime.now().time()
+    return current_time.strftime('%I:%M %p')
+
+def get_current_date():
+    '''Returns a printable string for the current time.'''
+    current_time = datetime.datetime.now().date()
+    return current_time.strftime('%B %d, %Y')
