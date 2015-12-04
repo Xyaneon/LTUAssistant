@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+import settings
 import speech
 import assistantdb
 
@@ -22,7 +23,17 @@ def Integrate(optional_message = None):
         verb = "%s %s" % (verb, preposition)
         verb_object = noun2
     print(verb, verb_object, verb2)
-    assistantdb.parse(verb.lower(), verb_object.lower(), noun2.lower(), verb2.lower())
+    if not assistantdb.parse(verb.lower(), verb_object.lower(), noun2.lower(), verb2.lower()):
+        # Text not understood; check for hardcoded special commands we
+        # otherwise can't properly handle yet, like settings
+        if sentence == 'use a female voice':
+            settings.set_voice('female')
+            speech.speak('Okay, I will use a female voice from now on.', True)
+        elif sentence == 'use a male voice':
+            settings.set_voice('male')
+            speech.speak('Okay, I will use a male voice from now on.', True)
+        else:
+            speech.speak('Sorry, I don\'t understand what you want.', verbose)
 
 if __name__ == "__main__":
     # Command line argument parsing

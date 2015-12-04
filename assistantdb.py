@@ -165,7 +165,6 @@ def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
         if verb_object == "schedule":
             process_schedule(verbose)
     else:
-        speech.speak('Sorry, I don\'t understand what you want.', verbose)
         return False
     return True
 

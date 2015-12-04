@@ -27,3 +27,15 @@ else:
     config.read(settings_ini_path)
     username = config['Basic']['username']
     voice = config['Basic']['voice']
+
+def set_voice(voice_str='male'):
+    '''Sets the desired voice (female if specified, male otherwise).'''
+    global voice
+    if voice_str.lower() == 'female':
+        config['Basic']['voice'] = 'female'
+        voice = 'female'
+    else:
+        config['Basic']['voice'] = 'male'
+        voice = 'male'
+    with open(settings_ini_path, 'w') as configfile:
+        config.write(configfile)
