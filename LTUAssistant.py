@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import argparse
 import sys
 import speech
 import CoreNLP
@@ -24,7 +25,17 @@ def Integrate(optional_message = None):
     assistantdb.parse(verb.lower(), verb_object.lower(), noun2.lower(), verb2.lower())
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        Integrate(" ".join(sys.argv[1:]))
+    # Command line argument parsing
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-t', '--text-only-mode',
+                        help='make all user interaction happen in the terminal',
+                        action='store_true')
+    parser.add_argument('-c', '--command-string',
+                        help='user\'s initial command text in string form',
+                        type=str)
+    args = parser.parse_args()
+    # Main code
+    if args.command_string:
+        Integrate(args.command_string)
     else:
         Integrate()
