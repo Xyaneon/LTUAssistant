@@ -3,10 +3,10 @@
 import argparse
 import sys
 import speech
-import CoreNLP
 import assistantdb
 
 def Integrate(optional_message = None):
+    import CoreNLP
     if optional_message:
         sentence = optional_message
         print "Text input provided: '" + optional_message + "'"
