@@ -160,7 +160,7 @@ def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
         process_add_cal_event(verb_object, verbose)
     # This could be a few things
     elif verb == "what is":
-        if verb_object == "weather":
+        if verb_object.find("weather") != -1:
             process_weather(verbose)
         if verb_object == "schedule":
             process_schedule(verbose)
