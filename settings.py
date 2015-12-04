@@ -28,6 +28,15 @@ else:
     username = config['Basic']['username']
     voice = config['Basic']['voice']
 
+def set_username(name_str=''):
+    '''Sets the username if provided.'''
+    global username
+    if not name_str.lower() == '':
+        config['Basic']['username'] = name_str
+        username = name_str
+    with open(settings_ini_path, 'w') as configfile:
+        config.write(configfile)
+
 def set_voice(voice_str='male'):
     '''Sets the desired voice (female if specified, male otherwise).'''
     global voice

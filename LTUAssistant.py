@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+import re
 import sys
 import settings
 import speech
@@ -12,7 +13,9 @@ def Integrate(optional_message = None):
         sentence = optional_message
         print "Text input provided: '" + optional_message + "'"
     else:
-        speech.speak('What can I help you with?', True)
+        greeting_str = 'Hi ' + settings.username.capitalize()
+        greeting_str += '! What can I help you with?'
+        speech.speak(greeting_str, True)
         (success, sentence) = speech.listen()
         if not success:
             speech.speak(sentence, True)
@@ -26,14 +29,18 @@ def Integrate(optional_message = None):
     if not assistantdb.parse(verb.lower(), verb_object.lower(), noun2.lower(), verb2.lower()):
         # Text not understood; check for hardcoded special commands we
         # otherwise can't properly handle yet, like settings
+        username_regex = re.compile('(hello |hi )*my name is (.+)')
         if sentence == 'use a female voice':
             settings.set_voice('female')
             speech.speak('Okay, I will use a female voice from now on.', True)
         elif sentence == 'use a male voice':
             settings.set_voice('male')
             speech.speak('Okay, I will use a male voice from now on.', True)
+        elif username_regex.search(sentence):
+            settings.set_username(username_regex.search(sentence).group(2))
+            speech.speak('Pleased to meet you, ' + settings.username + '!', True)
         else:
-            speech.speak('Sorry, I don\'t understand what you want.', verbose)
+            speech.speak('Sorry, I don\'t understand what you want.', True)
 
 if __name__ == "__main__":
     # Command line argument parsing
