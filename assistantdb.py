@@ -106,8 +106,32 @@ def process_add_cal_event(event_str, verbose):
         speech.speak('Sorry, I am unable to help you schedule this right now.', verbose)
 
 def process_weather(verbose):
+    '''Tells the user what the current weather conditions are.'''
     degrees, status = web.GetWeatherInfo()
     speech.speak("It is " + degrees + " degrees and " + status.lower() + ".", verbose)
+
+def process_schedule(verbose):
+    '''Tells the user what events are planned for today from the calendar DB.'''
+    event_list = calendardb.get_todays_events()
+    if len(event_list) < 1:
+        output_str = 'There are no events currently scheduled.'
+    elif len(event_list) == 1:
+        output_str = ' '.join(['You only have', event_list[0].event_str, 'at',
+                               event_list[0].start_time_str]) + '.'
+    elif len(event_list) == 2:
+        output_str = ' '.join(['You have', event_list[0].event_str, 'at',
+                               event_list[0].start_time_str, 'and',
+                               event_list[1].event_str, 'at',
+                               event_list[1].start_time_str]) + '.'
+    else:
+        # 3 or more events
+        output_str = 'You have '
+        for event in event_list[:-1]:
+            output_str += ' '.join([event.event_str, 'at',
+                                    event.start_time_str]) + ', '
+        output_str += ' '.join(['and', event_list[-1].event_str, 'at',
+                                event_list[-1].start_time_str]) + '.'
+    speech.speak(output_str, verbose)
 
 def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
     '''Parse the command and take an action. Returns True if the command is
@@ -138,6 +162,8 @@ def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
     elif verb == "what is":
         if verb_object == "weather":
             process_weather(verbose)
+        if verb_object == "schedule":
+            process_schedule(verbose)
     else:
         speech.speak('Sorry, I don\'t understand what you want.', verbose)
         return False
