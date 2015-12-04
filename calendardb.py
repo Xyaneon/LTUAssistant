@@ -24,22 +24,22 @@ def next_weekday(weekday, d=datetime.datetime.now()):
     '''Returns the datetime for the next given day of the week, given as a
     string. Returns None if weekday is not a valid string.
     The second argument is today's date if no datetime is provided.'''
-    if weekday.lowercase() not in day_values:
+    if weekday.lower() not in day_values:
         return None
-    days_ahead = day_values[weekday.lowercase()] - d.weekday()
+    days_ahead = day_values[weekday.lower()] - d.weekday()
     if days_ahead <= 0: # Target day already happened this week
         days_ahead += 7
     return d + datetime.timedelta(days_ahead)
 
 def convert_str_to_date(date_str):
     '''Converts a string object to a datetime object.'''
-    if date_str.lowercase() == 'tomorrow':
+    if date_str.lower() == 'tomorrow':
         return datetime.date.today() + datetime.timedelta(days=1)
-    elif date_str.lowercase() == 'today':
+    elif date_str.lower() == 'today':
         return datetime.date.today()
-    elif date_str.lowercase() == 'yesterday':
+    elif date_str.lower() == 'yesterday':
         return datetime.date.today() + datetime.timedelta(days=-1)
-    elif date_str.lowercase() in day_values:
+    elif date_str.lower() in day_values:
         return next_weekday(date_str)
     # Otherwise, process as a three-part date
     part_list = date_str.split()

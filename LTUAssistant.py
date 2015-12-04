@@ -35,6 +35,8 @@ if __name__ == "__main__":
                         type=str)
     args = parser.parse_args()
     # Main code
+    if args.text_only_mode:
+        speech.text_only_mode = True
     if args.command_string:
         Integrate(args.command_string)
     else:
