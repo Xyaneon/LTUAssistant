@@ -79,6 +79,16 @@ def read_events():
             event_list.append(CalendarEvent(row[0], row[1], row[2], row[3]))
     return event_list
 
+def get_events_for_date(date_str=''):
+    '''Returns a list of CalendarEvents scheduled for today. If date_str is
+    not given, default to today's date (see get_todays_events()).'''
+    event_list = read_events()
+    if date_str:
+        requested_date = convert_str_to_date(date_str)
+    else:
+        requested_date = datetime.datetime.today().date()
+    return [event for event in event_list if event.date == requested_date]
+
 def get_todays_events():
     '''Returns a list of CalendarEvents scheduled for today.'''
     event_list = read_events()
