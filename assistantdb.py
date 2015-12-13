@@ -47,7 +47,7 @@ def process_website(site_name, verbose):
 
 def process_send_email(recipient_info, verbose):
     '''Take appropriate action with the given email recipient information.'''
-    if recipient_info:
+    if recipient_info and recipient_info.find("@") != -1:
         recipient = 'mailto:' + recipient_info  # Open default email client
     else:
         recipient = 'https://mail.google.com/mail/u/0/#compose' # Gmail
@@ -142,7 +142,7 @@ def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
     print('\talternate_verb: ' + alternate_verb)
     print('\talternate_noun: ' + alternate_noun)
     browse_cmd_list = ['start', 'open', 'go', 'go to', 'browse', 'browse to', 'launch', 'take to', 'show'] #Original verb only + addition verb 'show'
-    email_cmd_list = ['email', 'compose', 'send', 'send to', "write", "write to"]
+    email_cmd_list = ['email', 'compose', 'compose to', 'send', 'send to', "write", "write to"]
     roomfinder_cmd_list = ['find', 'where is']
     calendar_cmd_list = ['schedule', 'remind', 'plan', 'planning'] #FIXME: remove 'planning' verb once recognition bug is solved
 
