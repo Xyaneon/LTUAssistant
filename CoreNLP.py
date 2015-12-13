@@ -62,10 +62,10 @@ def GetSubject(parsed, verbPos):
 			return (ret[0], nounPos[1])
 		return nounPos
 	# Look for noun subject / direct object of the verb
-	ret = FindDependency(parsed, verbPos, "nsubj")
+	ret = FindDependency(parsed, verbPos, "dobj")
 	if ret:
 		return ExtendSubject(parsed, ret)
-	ret = FindDependency(parsed, verbPos, "dobj")
+	ret = FindDependency(parsed, verbPos, "nsubj")
 	if ret:
 		return ExtendSubject(parsed, ret)
 
