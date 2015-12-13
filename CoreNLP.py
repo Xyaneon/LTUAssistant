@@ -93,11 +93,13 @@ def GetExtra(parsed, verbPos):
 			prep = FindDependency(parsed, newVerb, "prep")
 	# Find the subject based on that preposition
 	if prep:
+		if GetWords(parsed, prep) == "for":
+			return None, None, None
 		newSubject = FindDependency(parsed, prep, "pobj")
 		if not newSubject:
 			# not sure if this is possible
 			print("Error parsing preposition")
-			return
+			return None, None, None
 		# Unfinished, look for time stuff here
 		time = FindDependency(parsed, newSubject, "num")
 		if time and time[0] < newSubject[1]:
