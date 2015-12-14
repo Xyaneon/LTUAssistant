@@ -52,18 +52,33 @@ def FindDependency(parsed, pos, depType):
 
 # Look for the subject of a sentence (based on a verb we already found)
 def GetSubject(parsed, verbPos):
+	def CheckUselessSubject(parsed, verbPos, nounPos):
+		if parsed["pos"][nounPos[0]] == "PRP":
+			# The subject we had might not be too useful, so check for another one instead
+			ret = FindDependency(parsed, verbPos, "tmod")
+			if ret:
+				return ret
+			# 'dep' is actually something that happens when CoreNLP is confused, but we need to do this for sentences such as 'what time is it'
+			ret = FindDependency(parsed, verbPos, "dep")
+			if ret:
+				return ret
+		return nounPos
+
 	# Make sure it finds the entire subject for things like "ltu events"
 	def ExtendSubject(parsed, nounPos):
 		ret = FindDependency(parsed, nounPos, "nn")
 		if ret and ret[0] < nounPos[1]:
 			return (ret[0], nounPos[1])
 		return nounPos
+
 	# Look for noun subject / direct object of the verb
 	ret = FindDependency(parsed, verbPos, "dobj")
 	if ret:
+		ret = CheckUselessSubject(parsed, verbPos, ret)
 		return ExtendSubject(parsed, ret)
 	ret = FindDependency(parsed, verbPos, "nsubj")
 	if ret:
+		ret = CheckUselessSubject(parsed, verbPos, ret)
 		return ExtendSubject(parsed, ret)
 
 	# That failed, just return the first noun it finds

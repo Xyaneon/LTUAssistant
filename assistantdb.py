@@ -159,14 +159,14 @@ def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
         # Schedule an event for the user
         process_add_cal_event(verb_object, verbose)
     # This could be a few things
-    elif verb == "what is":
+    elif verb == "what is" or verb == "tell" or verb == "is":
         if verb_object.find("weather") != -1:
             process_weather(verbose)
         if verb_object == "schedule":
             process_schedule(verbose)
         if verb_object == "time":
             speech.speak('It is currently ' + calendardb.get_current_time() + '.', True)
-        if verb_object == "date":
+        if verb_object == "date" or verb_object == "day":
             speech.speak('Today is ' + calendardb.get_current_date() + '.', True)
     else:
         return False
