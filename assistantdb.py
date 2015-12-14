@@ -4,6 +4,7 @@ import argparse
 import calendardb
 import notify2
 import speech  # Used here for interactive questions
+import settings
 import subprocess
 import sys
 import webbrowser
@@ -133,7 +134,14 @@ def process_schedule(verbose):
                                 event_list[-1].start_time_str]) + '.'
     speech.speak(output_str, verbose)
 
-def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
+def process_voice(voice):
+    if voice in ("female", "male"):
+        settings.set_voice(voice)
+        speech.speak('Okay, I will use a %s voice from now on.' % (voice), True)
+    else:
+        speech.speak('I don\'t understand what voice you want')
+
+def parse(verb, verb_object, alternate_verb, alternate_noun, adjective, verbose=False):
     '''Parse the command and take an action. Returns True if the command is
     understood, and False otherwise.'''
     # Print parameters for debugging purposes
@@ -141,10 +149,12 @@ def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
     print('\tverb_object:    ' + verb_object)
     print('\talternate_verb: ' + alternate_verb)
     print('\talternate_noun: ' + alternate_noun)
+    print('\tadjective:      ' + adjective)
     browse_cmd_list = ['start', 'open', 'go', 'go to', 'browse', 'browse to', 'launch', 'take to', 'show'] #Original verb only + addition verb 'show'
     email_cmd_list = ['email', 'compose', 'compose to', 'send', 'send to', "write", "write to"]
     roomfinder_cmd_list = ['find', 'where is']
     calendar_cmd_list = ['schedule', 'remind', 'remind about', 'plan']
+    voice_cmd_list = ['use']
 
     if verb in browse_cmd_list:
         # Open an indicated web page in the default browser
@@ -158,6 +168,9 @@ def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
     elif verb in calendar_cmd_list:
         # Schedule an event for the user
         process_add_cal_event(verb_object, verbose)
+    elif verb in voice_cmd_list:
+        # Change voice between male / female
+        process_voice(adjective)
     # This could be a few things
     elif verb == "what is" or verb == "tell" or verb == "is":
         if verb_object.find("weather") != -1:

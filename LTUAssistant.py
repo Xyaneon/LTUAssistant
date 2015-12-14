@@ -30,7 +30,7 @@ def Integrate(optional_message = None):
     sentence = sentence.replace("Start", "start").replace("open", "Open").replace("Please", "").replace("please", "")
 
     # Call NLP parsing function
-    (verb, verb_object, noun2, verb2, preposition) = CoreNLP.Parse(sentence)
+    (verb, verb_object, noun2, verb2, preposition, adjective) = CoreNLP.Parse(sentence)
 
     # Fix some more edge cases with broken sentences
     if not verb:
@@ -41,17 +41,11 @@ def Integrate(optional_message = None):
         verb = "%s %s" % (verb, preposition)
         verb_object = noun2
 
-    if not assistantdb.parse(verb.lower(), verb_object.lower(), noun2.lower(), verb2.lower()):
+    if not assistantdb.parse(verb.lower(), verb_object.lower(), noun2.lower(), verb2.lower(), adjective.lower()):
         # Text not understood; check for hardcoded special commands we
         # otherwise can't properly handle yet, like settings
         username_regex = re.compile('(hello |hi )*my name is (.+)')
-        if sentence == 'use a female voice':
-            settings.set_voice('female')
-            speech.speak('Okay, I will use a female voice from now on.', True)
-        elif sentence == 'use a male voice':
-            settings.set_voice('male')
-            speech.speak('Okay, I will use a male voice from now on.', True)
-        elif username_regex.search(sentence):
+        if username_regex.search(sentence):
             settings.set_username(username_regex.search(sentence).group(2))
             speech.speak('Pleased to meet you, ' + settings.username + '!', True)
         else:

@@ -93,6 +93,9 @@ def GetSubject(parsed, verbPos):
 	if nounStart:
 		return (nounStart, len(parsed["tokens"])-1)
 
+def GetAdjective(parsed, nounPos):
+	return FindDependency(parsed, nounPos, "amod")
+
 # Get Extra data, checking for prepositions that modify things
 # Parses some more advanced sentences, with multiple verbs and nouns
 def GetExtra(parsed, verbPos):
@@ -128,7 +131,7 @@ def GetWords(parsed, wordPositions):
 
 def Parse(text):
 	parsed = ParseText(text)["sentences"]
-	verb = noun = newNoun = newVerb = prep = otherThing = None
+	verb = noun = newNoun = newVerb = prep = adjective = None
 	# Search through all sentences, but we only actually use the first one
 	for sentence in parsed:
 		print(sentence)
@@ -145,6 +148,7 @@ def Parse(text):
 			noun = GetSubject(sentence, verb)
 			if noun:
 				print(GetWords(sentence, noun))
+				adjective = GetAdjective(sentence, noun)
 			else:
 				print("Could not find the subject")
 
@@ -161,9 +165,7 @@ def Parse(text):
 		print("\n")
 
 		finalVerb = GetWords(sentence, verb)
-		if otherThing:
-			finalVerb = "%s %s" % (GetWords(sentence, otherThing), finalVerb)
-		return finalVerb, GetWords(sentence, noun), GetWords(sentence, newNoun), GetWords(sentence, newVerb), GetWords(sentence, prep)
+		return finalVerb, GetWords(sentence, noun), GetWords(sentence, newNoun), GetWords(sentence, newVerb), GetWords(sentence, prep), GetWords(sentence, adjective)
 
 
 
