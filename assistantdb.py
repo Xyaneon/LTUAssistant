@@ -199,7 +199,7 @@ def parse(verb, verb_object, alternate_noun, alternate_verb, adjective, verbose=
         elif verb_object == "name":
             return process_name_change(alternate_noun)
     elif verb == "call":
-        return process_name_change(verb_object or alternate_noun)
+        return process_name_change(alternate_noun or verb_object)
     else:
         return False
     return True
