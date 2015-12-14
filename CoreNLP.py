@@ -19,6 +19,16 @@ print("************************* CoreNLP loaded! *****************************")
 def ParseText(text):
 	return proc.parse_doc(text)
 
+# This function searches "deps_basic" to find relationships between words
+# It is passed in the position of the word(s) that we relationship is on
+# And then searches for any dependencies of the type we want on those words
+def FindDependency(parsed, pos, depType, reverse = False):
+	for dep in parsed["deps_basic"]:
+		if dep[0] == depType:
+			tocheck = pos if reverse else dep[1:]
+			if tocheck[0] in range(pos[0], pos[1]):
+				return (tocheck[1], tocheck[1]+1)
+
 
 # Looks for the first word in the sentence with a part of speech starting in "V"
 # Returns that verb, and also the word before that if it is an adverb / determiner
@@ -33,6 +43,10 @@ def GetVerb(parsed):
 				return (word, word+1) #parsed["tokens"][word]
 			#(parsed["lemmas"][word], parsed["tokens"][word], parsed["pos"][word])
 
+# My name is Jacob: 'Jacob' is the copula
+def GetCopula(parsed, verbPos):
+	return FindDependency(parsed, verbPos, "cop", reverse=True)
+
 # Support sentences such as "Tell me where room S202 is"
 # Previously would find "Tell" as verb and "me" as subject, and not see anything else at all. The tell me isn't relevant here though
 # Searches for a ccomp to hopefully find the real verb
@@ -41,14 +55,6 @@ def ConfirmVerb(parsed, verb):
 	if newVerb and parsed["pos"][newVerb[0]].startswith("V"):
 		return newVerb
 	return None
-
-# This function searches "deps_basic" to find relationships between words
-# It is passed in the position of the word(s) that we relationship is on
-# And then searches for any dependencies of the type we want on those words
-def FindDependency(parsed, pos, depType):
-	for dep in parsed["deps_basic"]:
-		if dep[0] == depType and dep[1] in range(pos[0], pos[1]):
-			return (dep[2], dep[2]+1)
 
 # Look for the subject of a sentence (based on a verb we already found)
 def GetSubject(parsed, verbPos):
@@ -106,6 +112,10 @@ def GetExtra(parsed, verbPos):
 		newVerb = FindDependency(parsed, verbPos, "xcomp")
 		if newVerb:
 			prep = FindDependency(parsed, newVerb, "prep")
+			# I really can't remember what I was using xcomp for
+			# But if there isn't a preposition, it seems xcomp really points to a noun
+			if not prep:
+				newSubject, newVerb = newVerb, None
 	# Find the subject based on that preposition
 	if prep:
 		if GetWords(parsed, prep) == "for":
@@ -145,20 +155,26 @@ def Parse(text):
 				verb = newVerb
 				print("Changing verb to %s" % GetWords(sentence, verb))
 
-			noun = GetSubject(sentence, verb)
+			copula = GetCopula(sentence, verb)
+
+			noun = GetSubject(sentence, copula or verb)
 			if noun:
 				print(GetWords(sentence, noun))
 				adjective = GetAdjective(sentence, noun)
 			else:
 				print("Could not find the subject")
 
-			newNoun, newVerb, prep = GetExtra(sentence, verb)
+			newNoun, newVerb, prep = GetExtra(sentence, copula or verb)
 			if newNoun:
 				print("New Noun: " + GetWords(sentence, newNoun))
 			if newVerb:
 				print("New Verb: " + GetWords(sentence, newVerb))
 			if prep:
 				print("Prep: " + GetWords(sentence, prep))
+
+			# Probably contains useful info
+			if copula and not newNoun and not newVerb and not prep:
+				newNoun = copula
 		else:
 			print("Could not find any verbs")
 		# just return the first sentence only for now

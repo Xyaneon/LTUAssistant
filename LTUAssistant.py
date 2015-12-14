@@ -42,14 +42,7 @@ def Integrate(optional_message = None):
         verb_object = noun2
 
     if not assistantdb.parse(verb.lower(), verb_object.lower(), noun2.lower(), verb2.lower(), adjective.lower()):
-        # Text not understood; check for hardcoded special commands we
-        # otherwise can't properly handle yet, like settings
-        username_regex = re.compile('(hello |hi )*my name is (.+)')
-        if username_regex.search(sentence):
-            settings.set_username(username_regex.search(sentence).group(2))
-            speech.speak('Pleased to meet you, ' + settings.username + '!', True)
-        else:
-            speech.speak('Sorry, I don\'t understand what you want.', True)
+        speech.speak('Sorry, I don\'t understand what you want.', True)
 
 if __name__ == "__main__":
     # Command line argument parsing

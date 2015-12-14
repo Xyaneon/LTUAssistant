@@ -141,7 +141,15 @@ def process_voice(voice):
     else:
         speech.speak('I don\'t understand what voice you want')
 
-def parse(verb, verb_object, alternate_verb, alternate_noun, adjective, verbose=False):
+def process_name_change(new_name):
+    if new_name:
+        settings.set_username(new_name)
+        speech.speak('Pleased to meet you, ' + settings.username + '!', True)
+        return True
+    else:
+        return False
+
+def parse(verb, verb_object, alternate_noun, alternate_verb, adjective, verbose=False):
     '''Parse the command and take an action. Returns True if the command is
     understood, and False otherwise.'''
     # Print parameters for debugging purposes
@@ -172,15 +180,26 @@ def parse(verb, verb_object, alternate_verb, alternate_noun, adjective, verbose=
         # Change voice between male / female
         process_voice(adjective)
     # This could be a few things
-    elif verb == "what is" or verb == "tell" or verb == "is":
+    elif verb == "what is" or verb == "tell":
         if verb_object.find("weather") != -1:
             process_weather(verbose)
-        if verb_object == "schedule":
+        elif verb_object == "schedule":
             process_schedule(verbose)
+        elif verb_object == "time":
+            speech.speak('It is currently ' + calendardb.get_current_time() + '.', True)
+        elif verb_object == "date" or verb_object == "day":
+            speech.speak('Today is ' + calendardb.get_current_date() + '.', True)
+        else:
+            return False
+    elif verb == "is":
         if verb_object == "time":
             speech.speak('It is currently ' + calendardb.get_current_time() + '.', True)
-        if verb_object == "date" or verb_object == "day":
+        elif verb_object == "date" or verb_object == "day":
             speech.speak('Today is ' + calendardb.get_current_date() + '.', True)
+        elif verb_object == "name":
+            return process_name_change(alternate_noun)
+    elif verb == "call":
+        return process_name_change(verb_object or alternate_noun)
     else:
         return False
     return True
