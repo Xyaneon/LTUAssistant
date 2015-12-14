@@ -7,6 +7,12 @@ import settings
 import speech
 import assistantdb
 
+def CoreNLPFail(sentence):
+    words = sentence.split()
+    possibleVerb = words[0].lower()
+    if possibleVerb in ("show", "plan"):
+        return possibleVerb, sentence[len(possibleVerb)+1:]
+
 def Integrate(optional_message = None):
     import CoreNLP
     if optional_message:
@@ -20,12 +26,21 @@ def Integrate(optional_message = None):
         if not success:
             speech.speak(sentence, True)
             exit()
-    sentence = sentence.replace("Start", "start").replace("open", "Open").replace("Show", "show").replace("Please", "").replace("please", "")
+    # CoreNLP is weird, need to replace some stuff to make it properly recognize short sentences
+    sentence = sentence.replace("Start", "start").replace("open", "Open").replace("Please", "").replace("please", "")
+
+    # Call NLP parsing function
     (verb, verb_object, noun2, verb2, preposition) = CoreNLP.Parse(sentence)
+
+    # Fix some more edge cases with broken sentences
+    if not verb:
+        verb, verb_object = CoreNLPFail(sentence)
+
+    # TODO: Eventually we should probably not attach the preposition to the verb (does it actually improve accuracy?)
     if preposition:
         verb = "%s %s" % (verb, preposition)
         verb_object = noun2
-    print(verb, verb_object, verb2)
+
     if not assistantdb.parse(verb.lower(), verb_object.lower(), noun2.lower(), verb2.lower()):
         # Text not understood; check for hardcoded special commands we
         # otherwise can't properly handle yet, like settings

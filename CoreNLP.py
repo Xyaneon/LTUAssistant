@@ -37,13 +37,10 @@ def GetVerb(parsed):
 # Previously would find "Tell" as verb and "me" as subject, and not see anything else at all. The tell me isn't relevant here though
 # Searches for a ccomp to hopefully find the real verb
 def ConfirmVerb(parsed, verb):
-	newverbcheck = FindDependency(parsed, verb, "ccomp")
-	if newverbcheck and parsed["pos"][newverbcheck[0]].startswith("V"):
-		# this finds the word "where" based on the is
-		otherThing = FindDependency(parsed, newverbcheck, "advmod")
-		if otherThing:
-			return otherThing, newverbcheck
-	return None, None
+	newVerb = FindDependency(parsed, verb, "ccomp")
+	if newVerb and parsed["pos"][newVerb[0]].startswith("V"):
+		return newVerb
+	return None
 
 # This function searches "deps_basic" to find relationships between words
 # It is passed in the position of the word(s) that we relationship is on
@@ -125,9 +122,9 @@ def Parse(text):
 			print(GetWords(sentence, verb))
 
 			# support some fancier sentences
-			otherThing, newverbcheck = ConfirmVerb(sentence, verb)
-			if otherThing and newverbcheck:
-				verb = newverbcheck
+			newVerb = ConfirmVerb(sentence, verb)
+			if newVerb:
+				verb = newVerb
 				print("Changing verb to %s" % GetWords(sentence, verb))
 
 			noun = GetSubject(sentence, verb)

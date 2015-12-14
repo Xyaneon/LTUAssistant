@@ -61,7 +61,7 @@ def process_find_room(room_str, verbose):
         words = room_str.split()
         if words[0] == "room":
             words.remove("room")
-        if not len(words) or len(words[0]) != 4:
+        if not len(words) or len(words[0]) not in range(4, 6):
             finder_message = 'Sorry, but I don\'t think you told me which room you want.'
         # TODO: Use a regular expression for better room number validity
         else:
@@ -144,7 +144,7 @@ def parse(verb, verb_object, alternate_verb, alternate_noun, verbose=False):
     browse_cmd_list = ['start', 'open', 'go', 'go to', 'browse', 'browse to', 'launch', 'take to', 'show'] #Original verb only + addition verb 'show'
     email_cmd_list = ['email', 'compose', 'compose to', 'send', 'send to', "write", "write to"]
     roomfinder_cmd_list = ['find', 'where is']
-    calendar_cmd_list = ['schedule', 'remind', 'plan', 'planning'] #FIXME: remove 'planning' verb once recognition bug is solved
+    calendar_cmd_list = ['schedule', 'remind', 'remind about', 'plan']
 
     if verb in browse_cmd_list:
         # Open an indicated web page in the default browser
